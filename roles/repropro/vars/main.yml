@@ -1,0 +1,7 @@
+---
+fqdn: unisonweb.vireo.org
+gpg_fingerprint: 2AE0E81BA737103BA24137E838E7CDD19D5B6EDA
+
+rndc_host: "arowana.vireo.org"
+rndc_port: 953
+rndc_secret: ""

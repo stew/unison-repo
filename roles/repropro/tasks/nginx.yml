@@ -1,0 +1,35 @@
+- name: "remove default nginx config"
+  file:
+    path: /etc/nginx/{{item}}/default
+    state: absent
+  with_items:
+    - sites-available
+    - sites-enabled
+
+- name: "deploy nginx config"
+  copy:
+    dest: /etc/nginx/sites-available/repo
+    src: nginx-site
+
+- name: "enable repo site"
+  file:
+    src: /etc/nginx/sites-available/repo
+    dest: /etc/nginx/sites-enabled/repo
+    state: link
+
+- name: "does cert already exist"
+  stat:
+    path: "/etc/letsencrypt/live/{{fqdn}}//cert.pem"
+  register: certbot_certificate
+  changed_when: False
+
+
+- name: "get cert expiration date"
+  shell: "date --date=\"$(openssl x509 -in /etc/letsencrypt/live/{{fqdn}}/cert.pem -noout -enddate | cut -d= -f 2)\" --iso-8601"
+  register: certbot_expiration_date
+  changed_when: False
+  when: certbot_certificate.stat.exists == True
+
+- name: "https enable nginx using let's encrypt"
+  command: certbot -n --nginx --domains {{fqdn}}
+  when: certbot_certificate.stat.exists == False

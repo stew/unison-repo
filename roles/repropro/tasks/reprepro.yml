@@ -1,0 +1,78 @@
+- name: "create repo directories"
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: repo
+  with_items:
+    - /srv/repo
+    - /srv/repo/conf
+    - /srv/repo/incoming
+
+- name: "configure reprepro distributions"
+  copy:
+    dest: /srv/repo/conf/distributions
+    src: conf/distributions
+    owner: repo
+
+- name: "configure reprepro distributions"
+  copy:
+    dest: /srv/repo/conf/incoming
+    src: conf/incoming
+    owner: repo
+
+- name: "check for gpg key"
+  command: gpg -K {{gpg_fingerprint}}
+  register: key_exists
+  become: yes
+  become_user: repo
+  changed_when: key_exists.rc != 0
+  ignore_errors: True
+  tags:
+    - gpg
+
+- name: "temporariliy add gpg key"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 400
+    owner: repo
+  with_items:
+    - dest: /tmp/gpg_pub.key
+      src: gpg_pub.key
+    - dest: /tmp/gpg_prv.key
+      src: gpg_prv.key
+  when: key_exists.rc != 0
+  tags:
+    - gpg
+
+- name: "install gpg key"
+  command: gpg --import {{ item }}
+  become: yes
+  become_user: repo
+  when: key_exists.rc != 0
+  with_items:
+    - /tmp/gpg_pub.key
+    - /tmp/gpg_prv.key
+  tags:
+    - gpg
+
+- name: "delete tmp key file"
+  file:
+    path: "{{ item }}"
+    state: absent
+  when: key_exists.rc != 0
+  with_items: 
+    - /tmp/gpg_pub.key
+    - /tmp/gpg_prv.key
+  tags:
+    - gpg
+
+- name: "export repo directory structure"
+  command:
+    cmd: "reprepro export"
+    chdir: "/srv/repo"
+  become: true
+  become_user: "repo"
+  tags:
+    - export
+    - reprepro

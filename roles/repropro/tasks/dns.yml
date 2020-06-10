@@ -1,0 +1,14 @@
+---
+- name: "update the A record"
+  delegate_to: 127.0.0.1
+  tags: "dns"
+  nsupdate:
+    key_algorithm: "hmac-md5"
+    key_name: "rndc-key"
+    key_secret: "{{rndc_secret}}"
+    server: "{{rndc_host}}"
+    port: "{{rndc_port}}"
+    type: "A"
+    record: "{{fqdn}}."
+    value: "{{ansible_default_ipv4.address}}"
+    state: "present"

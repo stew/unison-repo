@@ -1,0 +1,8 @@
+Name: default
+Default: sid
+Options: multiple_distributions
+IncomingDir: incoming
+TempDir: incoming.temp
+MorgueDir: incoming.morgue
+LogDir: logs.incoming
+Cleanup: on_deny on_error

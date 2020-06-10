@@ -1,0 +1,16 @@
+---
+- name: "install packages"
+  apt:
+    name:
+      - nginx
+      - reprepro
+      - gpg
+      - certbot
+      - python-certbot-nginx
+      - python3-dnspython
+    state: present
+
+- import_tasks: dns.yml
+- import_tasks: user.yml
+- import_tasks: nginx.yml
+- import_tasks: reprepro.yml

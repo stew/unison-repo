@@ -1,0 +1,36 @@
+Origin: Unison
+Label: Stew
+Suite: sid
+Codename: unstable
+Components: main
+Architectures: i386 amd64 armhf source
+SignWith: 9D5B6EDA
+
+Origin: Unison
+Label: Stew
+Codename: buster
+Components: main
+Architectures: i386 amd64 armhf source
+SignWith: 9D5B6EDA
+
+Origin: Unison
+Label: Stew
+Codename: xenial
+Components: main
+Architectures: i386 amd64 armhf source
+SignWith: 9D5B6EDA
+
+Origin: Unison
+Label: Stew
+Codename: beaver
+Components: main
+Architectures: i386 amd64 armhf source
+SignWith: 9D5B6EDA
+
+Origin: Unison
+Label: Stew
+Codename: fossa
+Components: main
+Architectures: i386 amd64 armhf source
+SignWith: 9D5B6EDA
+

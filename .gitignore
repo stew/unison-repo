@@ -1,0 +1,3 @@
+.terraform
+roles/repropro/files/gpg_prv.key
+roles/repropro/files/gpg_pub.key

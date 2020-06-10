@@ -1,0 +1,9 @@
+- name: "create repo user"
+  user:
+    name: repo
+
+- name: "install public key"
+  authorized_key:
+    user: repo
+    state: present
+    key: "{{ lookup('file', '/home/stew/.ssh/id_rsa.pub') }}"
